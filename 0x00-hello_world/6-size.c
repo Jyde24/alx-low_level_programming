@@ -3,15 +3,17 @@
 *main - Print sizes of object types
 *Return: Always 0
 */
-
 int main(void)
 {
-	printf("size of char: %i byte(s)\n", (unsigned long)sizeof(char));
-	printf("size of an int: %i byte(s)\n", (unsigned long)sizeof(int));
-	printf("size of long int: %i byte(s)\n",
-	(unsigned long)sizeof(long int));
-	printf("size of long long int: %i byte(s)\n",
-	(unsigned long)sizeof(long long int));
-	printf("size of float: %i byte(s) \n", (unsigned long)sizeof(float));
+	char a;
+	int b;
+	long int c;
+	long long int d;
+	float f;
+	printf("size of char: %lu byte(s)\n", (unsigned long)sizeof(a));
+	printf("size of an int: %lu byte(s)\n", (unsigned long)sizeof(b));
+	printf("size of long int: %lu byte(s)\n", (unsigned long)sizeof(c));
+	printf("size of long long int: %lu byte(s)\n", (unsigned long)sizeof(d));
+	printf("size of float: %lu byte(s) \n", (unsigned long)sizeof(f));
 	return (0);
 }
