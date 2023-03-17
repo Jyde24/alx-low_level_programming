@@ -1,7 +1,8 @@
 #include <stdio.h>
 /**
-*main - Print sizes of object types
-*Return: Always 0 (Success)
+ *main - Print sizes of object types
+
+ *Return: Always 0 (Success)
 */
 
 int main(void)
