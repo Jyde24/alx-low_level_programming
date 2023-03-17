@@ -1,7 +1,6 @@
 #include <stdio.h>
 /**
  *main - Print sizes of object types
-
  *Return: Always 0 (Success)
 */
 
