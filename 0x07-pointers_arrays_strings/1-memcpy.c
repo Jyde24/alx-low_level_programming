@@ -10,6 +10,7 @@
 char *_memcpy(char *dest, char *src, unsigned int n)
 {
 	unsigned int r;
+
 	r = 0;
 
 	while (r < n)
