@@ -1,40 +1,45 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 /**
  * main - This program adds positive numbers.
  * @argv: array of pointers to strings
  * @argc: number of argument
- * Return: 0 or 1
+ * Return: returns 0 for integer or 1 for non-integers
  */
+
 
 int main(int argc, char *argv[])
 {
-	int a, b, c;
-	int sum = 0;
+	int a, b, len, sum;
+	char *ptr;
 
-	for (b = 1; *argv + b != argv[argc]; b++)
+	if (argc < 2)
+		printf("0\n");
+	else
 	{
-		for (c = 0; **argv + c != '\0'; c++)
+		sum = 0;
+		for (a = 1; a < argc; a++)
 		{
-			if (**argv + c <= '0'
-			    && **argv + c >= '9')
+			ptr = argv[a];
+			len = strlen(ptr);
+
+			for (b = 0; b < len; b++)
 			{
-				printf("Error\n");
-				return (1);
+				if (isdigit(*(ptr + b)) == 0)
+				{
+					printf("Error\n");
+					return (1);
+				}
 			}
+
+			sum = sum + atoi(argv[a]);
 		}
-	}
-	for (a = 1; a < argc; a++)
-	{
-		if (atoi(argv[a]) == 0)
-		{
-			printf("Error\n");
-			return (1);
-			}
-		sum += atoi(argv[a]);
-	}
+
 	printf("%d\n", sum);
+	}
 	return (0);
 }
