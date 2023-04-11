@@ -1,0 +1,1 @@
+This directory is for Project 0x0B on Malloc:function is used to allocate a certain amount of memory during the execution of a program. 1. difference between automatic and dynamic allocation, 2. When to use, How to use  and Why use MALLOC AND FREE (Deallocation of memory), 3. How to use valgrind to check for memory leak.
