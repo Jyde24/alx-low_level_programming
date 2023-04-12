@@ -36,20 +36,17 @@ char **strtow(char *str)
 {
 	char **mtrx, *tmp;
 	int a, b, c, length, words, start, end;
-	b = 0;
-	length = 0;
-	c = 0;
+
+	b = 0, length = 0, c = 0;
 
 	while (*(str + length))
 		length = 1 + length;
 	words = count_word(str);
 	if (words == 0)
 		return (NULL);
-
 	mtrx = (char **) malloc(sizeof(char *) * (words + 1));
 	if (mtrx == NULL)
 		return (NULL);
-
 	for (a = 0; a <= length; a++)
 	{
 		if (str[a] == ' ' || str[a] == '\0')
@@ -64,15 +61,12 @@ char **strtow(char *str)
 					*tmp++ = str[start++];
 				*tmp = '\0';
 				mtrx[b] = tmp - c;
-				b = b + 1;
-				c = 0;
+				b = b + 1, c = 0;
 			}
 		}
 		else if (c++ == 0)
 			start = a;
 	}
-
 	mtrx[b] = NULL;
-
 	return (mtrx);
 }
