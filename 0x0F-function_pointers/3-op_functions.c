@@ -4,8 +4,8 @@
 
 /**
   * op_add - print the name of this function
-  * @a: has the length of the arguments
-  * @b: has the arguments
+  * @x: has the length of the arguments
+  * @y: has the arguments
   * Return: 0 to indicate a good working of the program
   */
 int op_add(int x, int y)
@@ -14,8 +14,8 @@ int op_add(int x, int y)
 }
 /**
   * op_sub - print the name of this function
-  * @a: has the length of the arguments
-  * @b: has the arguments
+  * @x: has the length of the arguments
+  * @y: has the arguments
   * Return: 0 to indicate a good working of the program
   */
 int op_sub(int x, int y)
@@ -24,8 +24,8 @@ int op_sub(int x, int y)
 }
 /**
   * op_mul - print the name of this function
-  * @a: has the length of the arguments
-  * @b: has the arguments
+  * @x: has the length of the arguments
+  * @y: has the arguments
   * Return: 0 to indicate a good working of the program
   */
 int op_mul(int x, int y)
@@ -34,8 +34,8 @@ int op_mul(int x, int y)
 }
 /**
   * op_div - print the name of this function
-  * @a: has the length of the arguments
-  * @b: has the arguments
+  * @x: has the length of the arguments
+  * @y: has the arguments
   * Return: 0 to indicate a good working of the program
   */
 int op_div(int x, int y)
@@ -47,8 +47,8 @@ int op_div(int x, int y)
 }
 /**
   * op_mod - print the name of this function
-  * @a: has the length of the arguments
-  * @b: has the arguments
+  * @x: has the length of the arguments
+  * @y: has the arguments
   * Return: 0 to indicate a good working of the program
   */
 int op_mod(int x, int y)
