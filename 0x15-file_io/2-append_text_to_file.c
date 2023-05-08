@@ -9,22 +9,18 @@
  */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	ssize_t count_write;
-	int feed;
-	size_t x;
+	ssize_t feed;
 
 	if (filename == NULL)
 		return (-1);
-	if (text_content == NULL)
-		return (1);
-	feed = open(filename, O_WRONLY | O_APPEND);
+
+	feed = open(filename, O_CREAT | O_APPEND | O_WRONLY, 0600);
 	if (feed == -1)
 		return (-1);
-	while (text_content[x] != 0)
-		x = x + 1;
-	count_write = write(feed, text_content, x);
-	if (count_write == -1)
-		return (-1);
-	close(feed);
+
+	if (text_content != NULL)
+		write(feed, text_content, strlen(text_content));
+
 	return (1);
+}
 }
