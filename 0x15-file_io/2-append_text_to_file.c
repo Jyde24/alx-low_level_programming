@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include <string.h>
 /**
  * append_text_to_file - appens text at the end of a file
  * @filename: name of file
@@ -9,18 +9,27 @@
  */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	ssize_t feed;
+	int feed = 0;
+	size_t x = 0;
+	ssize_t count_write = 0;
 
-	if (filename == NULL)
+	if (!filename)
 		return (-1);
 
-	feed = open(filename, O_CREAT | O_APPEND | O_WRONLY, 0600);
-	if (feed == -1)
+	if (!text_content)
+		return (1);
+
+	feed = open(filename, O_WRONLY | O_APPEND);
+	if (!feed)
 		return (-1);
 
-	if (text_content != NULL)
-		write(feed, text_content, strlen(text_content));
+	while (text_content[x])
+		x = x + 1;
 
+	count_write = write(feed, text_content, x);
+	if (count_write == -1)
+		return (-1);
+
+	close(feed);
 	return (1);
-}
 }
