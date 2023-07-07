@@ -8,19 +8,15 @@
  * Return: the number of bits you would need to flip
  */
 unsigned int flip_bits(unsigned long int n, unsigned long int m)
-{
-	int x = 0;
-	int count = 0;
+{	
+	unsigned int counter = 0;
+	unsigned long int zor = n ^ m;
 
-	while (x < 64)
+	while (zor)
 	{
-		if ((n & 1) != (m & 1))
-		{
-			count = count + 1;
-			m = m >> 1;
-			n = n >> 1;
-			x = x + 1;
-		}
+		if (zor & 1)
+			counter = counter + 1;
+	 	zor >>= 1;
 	}
-	return (count);
+	return (counter);
 }
