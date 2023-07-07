@@ -8,7 +8,7 @@
  * Return: the number of bits you would need to flip
  */
 unsigned int flip_bits(unsigned long int n, unsigned long int m)
-{	
+{
 	unsigned int counter = 0;
 	unsigned long int zor = n ^ m;
 
@@ -16,7 +16,7 @@ unsigned int flip_bits(unsigned long int n, unsigned long int m)
 	{
 		if (zor & 1)
 			counter = counter + 1;
-	 	zor >>= 1;
+		zor >>= 1;
 	}
 	return (counter);
 }
