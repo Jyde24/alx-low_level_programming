@@ -1,61 +1,88 @@
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
-#include "main.h"
+#include <fcntl.h>
+#include <unistd.h>
+#include <elf.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+void print_error_and_exit(int code, const char *message);
+void display_elf_header(const char *filename);
 
 /**
- * displayElfHeader -  Function to read and display the ELF header
- * @filename: name of file to be accessed
- * return: nothing
- */
-void displayElfHeader(const char *filename)
-{
-	FILE *file = fopen(filename, "rb");
-
-	if (file == NULL)
-	{
-		printf("Error opening file.\n");
-		return;
-	}
-
-	ElfHeader header;
-
-	fread(&header, sizeof(ElfHeader), 1, file);
-
-/* Display the information*/
-
-	printf("Magic: %02X %02X %02X %02X\n", header.e_ident[0],
-		header.e_ident[1], header.e_ident[2], header.e_ident[3]);
-	printf("Class: %u-bit\n", (header.e_ident[4] == 1) ? 32 : 64);
-	printf("Data: %s\n", (header.e_ident[5] == 1) ?
-			"little-endian" : "big-endian");
-	printf("Version: %u\n", header.e_ident[6]);
-	printf("OS/ABI: %u\n", header.e_ident[7]);
-	printf("ABI Version: %u\n", header.e_ident[8]);
-	printf("Type: %u\n", header.e_type);
-	printf("Entry point address: 0x%lX\n", header.e_entry);
-
-	fclose(file);
-}
-
-/**
- * main - main funct
- * @argc: count
- * @argv: command
- * Return: always return 0
+ * main - copies the content of a file to another file
+ * @argc: number of arguments
+ * @argv: arguments
+ * Return: 1 on success , exit 98 on error
  */
 
 int main(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		printf("Usage: elf_header elf_filename\n");
-		return (1);
+		error_exit(98, "Usage: elf_header elf_filename");
 	}
 
-	char *filename = argv[1];
+	const char *file = argv[1];
 
-	displayElfHeader(filename);
+	print_header(file);
 
 	return (0);
+}
+
+/**
+ * error_exit - copies the content of a file to another file
+ * @code: inputs argument
+ * @message: pointer arguments
+ * Return: returns void.
+ */
+
+void error_exit(int code, const char *message)
+{
+	fprintf(stderr, "%s\n", message);
+	exit(code);
+}
+
+/**
+ * print_header - copies the content of a file to another file
+ * @file: Elf file to be accessed
+ *
+ * Return: returns void.
+ */
+
+void print_header(const char *file)
+{
+	int feed = open(file, O_RDONLY);
+
+	if (feed == -1)
+	{
+		error_exit(98, "Error: Can't open the file");
+	}
+	Elf64_Ehdr header;
+
+	if (read(feed, &header, sizeof(header)) != sizeof(header))
+	{
+		error_exit(98, "Error: Unable to read the ELF header");
+	}
+/* Check if it's a valid ELF file */
+	if (header.e_ident[EI_MAG0] != ELFMAG0
+	|| header.e_ident[EI_MAG1] != ELFMAG1 ||
+	header.e_ident[EI_MAG2] != ELFMAG2 || header.e_ident[EI_MAG3] != ELFMAG3)
+	{
+		error_exit(98, "Error: Not an ELF file");
+	}
+	printf("Magic: %02x %02x %02x %02x\n", header.e_ident[EI_MAG0],
+header.e_ident[EI_MAG1], header.e_ident[EI_MAG2], header.e_ident[EI_MAG3]);
+	printf("Class: %s\n", header.e_ident[EI_CLASS] == ELFCLASS64 ?
+		"ELF64" : "ELF32");
+	printf("Data: %s\n", header.e_ident[EI_DATA] == ELFDATA2LSB ?
+"2's complement, little-endian" : (header.e_ident[EI_DATA] == ELFDATA2MSB ?
+	"2's complement, big-endian" : "Unknown"));
+	printf("Version: %d\n", header.e_ident[EI_VERSION]);
+	printf("OS/ABI: %d\n", header.e_ident[EI_OSABI]);
+	printf("ABI Version: %d\n", header.e_ident[EI_ABIVERSION]);
+	printf("Type: %d\n", header.e_type);
+	printf("Entry point address: 0x%lx\n", header.e_entry);
+
+	close(feed);
 }
