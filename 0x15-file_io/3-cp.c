@@ -1,53 +1,77 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "main.h"
+#include <stdio.h>
+
+int close_error(int fd);
+void read_error(char *filename);
+void write_error(char *filename);
 
 /**
-* main - program that copies the content of a file to another file
-* @argc: num argument
-* @argv: string argument
-* Return: 0
-*/
-
+ * main - copies the content of a file to another file.
+ * @argc: argument counter.
+ * @argv: argument vector.
+ * Return: always return 0, or exit.
+ */
 int main(int argc, char *argv[])
 {
-	int file_from, file_to;
-	int num1 = 1024, num2 = 0;
-	char buf[1024];
+	char buffer[1024];
+	int fd_file_from, fd_file_to;
+	ssize_t bytes_counted = 1;
 
+	/* check number of argument */
 	if (argc != 3)
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n"), exit(97);
-	file_from = open(argv[1], O_RDONLY);
-	if (file_from == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
+	}
+	/* open and check fd for file_from */
+	fd_file_from = open(argv[1], O_RDONLY);
+	if (fd_file_from < 0)
+	{
+		read_error(argv[1]);
 		exit(98);
 	}
-	file_to = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR
-		| S_IRGRP | S_IWGRP | S_IROTH);
-	if (file_to == -1)
+	/* open and check fd for file_to */
+	fd_file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+	if (fd_file_to < 0)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-		close(file_from), exit(99);
+		write_error(argv[2]);
+		close_error(fd_file_from);
+		exit(99);
 	}
-	while (num1 == 1024)
+
+	/* copy content - loop checks end of file (file_from) */
+	while (bytes_counted)
 	{
-		num1 = read(file_from, buf, 1024);
-		if (num1 == -1)
+		/* read the next 1020 bytes in file_from and check read error */
+		bytes_counted = read(fd_file_from, buffer, 1024);
+		if (bytes_counted < 0)
 		{
-			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
+			read_error(argv[1]);
+			close_error(fd_file_from);
+			close_error(fd_file_to);
 			exit(98);
 		}
-		num2 = write(file_to, buf, num1);
-		if (num2 < num1)
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), exit(99);
+		/* check buffer end of file */
+		if (bytes_counted == 0)
+			break;
+		/* write the output in file_to and check write error */
+		bytes_counted = write(fd_file_to, buffer, bytes_counted);
+		if (bytes_counted < 0)
+		{
+			write_error(argv[2]);
+			close_error(fd_file_from);
+			close_error(fd_file_to);
+			exit(99);
+		}
 	}
 
-	if (close(file_from) == -1)
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_from), exit(100);
-
-	if (close(file_to) == -1)
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", file_to), exit(100);
-
+	/* close and check fd for file_from and file_to */
+	if (close_error(fd_file_from) < 0)
+	{
+		close_error(fd_file_to);
+		exit(100);
+	}
+	if (close_error(fd_file_to) < 0)
+		exit(100);
 	return (0);
 }
