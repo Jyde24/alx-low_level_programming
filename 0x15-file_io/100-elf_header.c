@@ -1,10 +1,7 @@
-
 #include "main.h"
-
 
 #include <elf.h>
 #include <sys/wait.h>
-
 
 void print_entry_address(char *ptr);
 void print_type(char *ptr);
@@ -45,12 +42,12 @@ void print_entry_address(char *ptr)
 			printf("00");
 	}
 	if (sys == '2')
-    	{
-        	begin = 26;
-        	for (i = begin; i > 23; i--)
-        	{
-            		if (ptr[i] >= 0)
-                		printf("%02x", ptr[i]);
+	{
+		begin = 26;
+		for (i = begin; i > 23; i--)
+		{
+			if (ptr[i] >= 0)
+				printf("%02x", ptr[i]);
 			else if (ptr[i] < 0)
 				printf("%02x", 256 + ptr[i]);
 		}
@@ -97,12 +94,12 @@ void print_osabi(char *ptr)
 	char osabi = ptr[7];
 
 	printf("  OS/ABI:                            ");
-    	if (osabi == 0)
-        	printf("UNIX - System V\n");
-    	else if (osabi == 2)
-        	printf("UNIX - NetBSD\n");
+	if (osabi == 0)
+		printf("UNIX - System V\n");
+	else if (osabi == 2)
+		printf("UNIX - NetBSD\n");
 	else if (osabi == 6)
-        	printf("UNIX - Solaris\n");
+		printf("UNIX - Solaris\n");
 	else
 		printf("<unknown: %x>\n", osabi);
 	printf("  ABI Version:                       %d\n", ptr[8]);
@@ -131,14 +128,14 @@ void print_version(char *ptr)
  */
 void print_data(char *ptr)
 {
-    char data = ptr[5];
+	char data = ptr[5];
 
-    printf("  Data:                              2's complement");
-    if (data == 1)
-        printf(", little endian\n");
+	printf("  Data:                              2's complement");
+	if (data == 1)
+		printf(", little endian\n");
 
-    if (data == 2)
-        printf(", big endian\n");
+	if (data == 2)
+		printf(", big endian\n");
 }
 
 /**
@@ -149,14 +146,14 @@ void print_data(char *ptr)
 
 void print_magic(char *ptr)
 {
-    int bytes;
+	int bytes;
 
-    printf("  Magic:  ");
+	printf("  Magic:  ");
 
-    for (bytes = 0; bytes < 16; bytes++)
-        printf(" %02x", ptr[bytes]);
+	for (bytes = 0; bytes < 16; bytes++)
+		printf(" %02x", ptr[bytes]);
 
-    printf("\n");
+	printf("\n");
 }
 
 /**
@@ -169,9 +166,8 @@ void check_sys(char *ptrmag)
 {
 	char sys = ptrmag[4] + '0';
 
-    	if (sys == '0')
-        	exit(98);
-
+	if (sys == '0')
+		exit(98);
 	printf("ELF Header:\n");
 	print_magic(ptrmag);
 	if (sys == '1')
@@ -244,5 +240,5 @@ int main(int argc, char *argv[])
 	check_sys(magic_buffer);
 	close(file_descriptor);
 
-	return 0;
+	return (0);
 }
